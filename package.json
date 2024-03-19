@@ -1,6 +1,6 @@
 {
   "name": "@redocmx/client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Conversión CFDI a PDF",
   "main": "src/index.js",
   "types": "src/types.d.ts",
