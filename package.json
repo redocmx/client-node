@@ -1,10 +1,11 @@
 {
-  "name": "client",
-  "version": "0.0.2",
+  "name": "@redocmx/client",
+  "version": "0.0.3",
   "description": "Conversión CFDI a PDF",
   "main": "src/index.js",
   "types": "src/types.d.ts",
   "type": "module",
+  "private": false,
   "engines": {
     "node": ">= 18.0.0"
   },
