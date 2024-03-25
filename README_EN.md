@@ -1,6 +1,6 @@
 # Converting CFDI to PDF
 
-## @redocmx/client
+## redocmx
 
 The `@redocmx/client` module is a Node.js client for interacting with the [redoc.mx](https://redoc.mx) REST API to convert CFDIs (Comprobante Fiscal Digital por Internet) to PDFs. 
 
@@ -13,13 +13,13 @@ This package includes TypeScript definitions allowing you to integrate it seamle
 To install the module, run:
 
 ```bash
-npm install @redocmx/client
+npm install redocmx --save
 ```
 
 or if you use `yarn`:
 
 ```bash
-yarn add @redocmx/client
+yarn add redocmx
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ First, import the module and create an instance of the Redoc client.
 You can optionally pass your API key as an argument, or the client will attempt to load it from the REDOC_API_KEY environment variable.
 
 ```javascript
-import Redoc from '@redocmx/client';
+import Redoc from 'redocmx';
 
 const redoc = new Redoc('your_api_key_here');
 ```

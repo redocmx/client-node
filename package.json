@@ -1,5 +1,5 @@
 {
-  "name": "@redocmx/client",
+  "name": "redocmx",
   "version": "0.0.4",
   "description": "Conversión CFDI a PDF",
   "main": "src/index.js",
