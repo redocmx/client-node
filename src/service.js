@@ -21,7 +21,7 @@ export default class Service {
     async cfdisConvert({file, payload}) {
 
         const formData = new FormData();
-        
+
         if(payload?.style_pdf){
             formData.append('style_pdf', payload.style_pdf);
         }

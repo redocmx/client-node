@@ -1,4 +1,5 @@
 import Cfdi from './cfdi.js';
+import Addenda from './addenda.js';
 import Service from './service.js';
 
 export default class Redoc {
@@ -8,7 +9,10 @@ export default class Redoc {
     }
 
     get cfdi() {
-        const cfdi = new Cfdi()
-        return cfdi;
+        return new Cfdi();
+    }
+
+    get addenda() {
+        return new Addenda()
     }
 }
