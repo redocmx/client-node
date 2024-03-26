@@ -1,27 +1,36 @@
 import Cfdi from './cfdi';
 import Service from './service';
 import Pdf from './pdf';
+import Addenda from './addenda';
 
 export default class Redoc {
     apiKey: string;
     service: Service;
     constructor(apiKey?: string);
     get cfdi(): Cfdi;
+    get addenda(): Addenda;
 }
 
-export default class Cfdi {
+export default class Cfdi extends File {
     pdf: Pdf | null;
-    addenda: string | null;
+    addenda: Addenda | null;
+    constructor();
+    setAddenda(addenda: Addenda, replaceValues?: object): void;
+    toPdf(payload?: CfdisConvertPayload): Promise<Pdf>;
+}
+export default class Addenda extends File {
+    constructor();
+    getFileContent(replaceValues?: object): Promise<string>;
+}
+
+export default class File {
     filePath: string | null;
     fileBuffer: Buffer | null;
     fileContent: string | null;
     constructor();
     fromFile(filePath: string): this;
     fromString(fileContent: string): this;
-    getXmlContent(): Promise<{ content: string | Buffer; type: 'string' | 'buffer' }>;
-    setAddenda(addenda: string): void;
-    getAddenda(): string | null;
-    toPdf(payload?: CfdisConvertPayload): Promise<Pdf>;
+    getFile(): Promise<{ content: string | Buffer; type: 'string' | 'buffer' }>;
 }
 
 export interface CfdisMetadata {
