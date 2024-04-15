@@ -1,4 +1,7 @@
-// import FormData from 'form-data'
+import fs from 'fs'
+
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+
 export default class Service {
     static instance = null;
 
@@ -128,7 +131,7 @@ export default class Service {
             headers: new Headers({
                 'x-redoc-api-key': this.apiKey,
                 'redoc-origin-name': 'sdk_node',
-                'redoc-origin-name': '0.0.1',
+                'redoc-origin-version': pkg.version,
                 ...(isForm ? {} : { 'Content-Type': 'application/json' }),
                 ...headers
             }),
