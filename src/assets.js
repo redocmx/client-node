@@ -89,17 +89,21 @@ export default class Assets {
 
     if (isImage) {
 
-      if (!data?.localPath) {
+      if (!data?.localPath && !data?.buffer) {
         throw new TypeError('Local path must be provided to create an image.');
       }
   
       if (typeof data?.localPath !== 'string') {
         throw new TypeError('Local path must be a valid string.');
       }
-
-      const file = new File().fromFile(data?.localPath)
-
-      assetData.file = await file.getFile()
+      
+      if (data?.buffer) {
+        const file = { type: 'buffer', content: data?.buffer }
+        assetData.file = file
+      } else {
+        const file = new File().fromFile(data?.localPath)
+        assetData.file = await file.getFile()
+      }
     }
 
     const asset = await this.service.createAsset({ path: assetData.path, file: assetData?.file })

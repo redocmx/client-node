@@ -1,4 +1,4 @@
-// import fs from 'node:fs/promises'
+import fs from 'node:fs'
 import Redoc from './src/index.js'
 
 // Inicializa Redoc con tu API key.
@@ -12,17 +12,20 @@ try {
 
   // const asset = await redoc.assets.get('Estilos/Inicial/base/header-logo');
   
-  await redoc.assets.delete('My folder renamed/')
+  // await redoc.assets.delete('My folder renamed/')
   // await redoc.assets.delete('My logo')
 
   // const createdFolder = await redoc.assets.create('', {
   //   name: 'My folder/'
   // })
 
-  // const createdImage = await redoc.assets.create('My folder renamed/', {
-  //   name: 'My logo',
-  //   localPath: './apple.png'
-  // })
+  const imageBuffer = fs.readFileSync('./apple.png')
+
+  const createdImage = await redoc.assets.create('My folder renamed/', {
+    name: 'My logo',
+    localPath: './spotify.png',
+    buffer: imageBuffer
+  })
 
   // const renamedFolder = await redoc.assets.update('My folder/', {
   //   name: 'My folder renamed',
