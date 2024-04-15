@@ -1,3 +1,4 @@
+// import FormData from 'form-data'
 export default class Service {
     static instance = null;
 
@@ -21,50 +22,39 @@ export default class Service {
     // CFDI
     async cfdisConvert({ file, payload }) {
 
-        const formData = new FormData();
+        const body = new FormData();
 
         if (payload?.style_pdf) {
-            formData.append('style_pdf', payload.style_pdf);
+            body.append('style_pdf', payload.style_pdf);
         }
         if (payload?.addenda) {
-            formData.append('addenda', payload.addenda);
+            body.append('addenda', payload.addenda);
         }
 
-        formData.append('xml', new Blob([file.content], { type: 'text/xml' }), { filename: 'document.xml' });
+        body.append('xml', new Blob([file.content], { type: 'text/xml' }), { filename: 'document' });
 
-        try {
-            const response = await fetch(`${this.apiBaseUrl}/cfdis/convert`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/pdf',
-                    'X-Redoc-Api-Key': this.apiKey,
-                },
-                body: formData,
-            });
+        const { data: arrayBuffer, headers } = this._request('/cfdis/convert', 'POST', {
+            isForm,
+            isBufferResponse: true,
+            headers: {
+                'Accept': 'application/pdf',
+            },
+            body
+        })
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+        const buffer = Buffer.from(arrayBuffer);
 
-            const arrayBuffer = await response.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
+        const metadata = Buffer.from((headers.get('x-redoc-xml-metadata')), 'base64').toString('utf-8');
 
-            const headers = response.headers;
-            const metadata = Buffer.from((headers.get('x-redoc-xml-metadata')), 'base64').toString('utf-8');
+        const transactionId = headers.get('x-redoc-transaction-id');
+        const totalPages = headers.get('x-redoc-pdf-total-pages');
+        const totalTime = headers.get('x-redoc-process-total-time');
 
-            const transactionId = headers.get('x-redoc-transaction-id');
-            const totalPages = headers.get('x-redoc-pdf-total-pages');
-            const totalTime = headers.get('x-redoc-process-total-time');
-
-            return { buffer, metadata, transactionId, totalPages, totalTime };
-        } catch (error) {
-            throw error;
-        }
+        return { buffer, metadata, transactionId, totalPages, totalTime };
     }
 
     // Assets
     async fetchAssets({ path, options }) {
-
         const { data } = await this._request('/images', 'GET', {
             params: {
                 path,
@@ -75,21 +65,54 @@ export default class Service {
         return data
     }
 
-    async createAsset(path, data) {
+    async createAsset({ path, file }) {
+        const body = new FormData()
 
+        body.append('path', path)
+
+        if (file) {
+            body.append('file', new Blob([file.content], { type: 'image/png' }), { filename: 'file' });
+        }
+
+        const { data } = await this._request('/images', 'POST', {
+            isForm: true,
+            body
+        })
+
+        return data
     }
 
-    async updateAsset(path, data) {
+    async updateAsset({ path, name, file }) {
+        const body = new FormData()
 
+        body.append('path', path)
+
+        if (name) {
+            body.append('name', name)
+        }
+
+        if (file) {
+            body.append('file', new Blob([file.content], { type: 'image/png' }), { filename: 'file' });
+        }
+
+        const { data } = await this._request('/images', 'PATCH', {
+            isForm: true,
+            body
+        })
+
+        return data
     }
 
-    async deleteAsset(path) {
-
+    async deleteAsset({ path }) {
+        await this._request('/images', 'DELETE', {
+            params: {
+                path,
+            }
+        })
     }
-
 
     async _request(endpoint, method, config = {}) {
-        const { headers, body, params } = config;
+        const { headers, body, params, isForm = false, isBufferResponse = false } = config;
 
         // Create a new URLSearchParams object for the query parameters
         const searchParams = new URLSearchParams(params);
@@ -106,10 +129,10 @@ export default class Service {
                 'x-redoc-api-key': this.apiKey,
                 'redoc-origin-name': 'sdk_node',
                 'redoc-origin-name': '0.0.1',
-                'Content-Type': 'application/json',
+                ...(isForm ? {} : { 'Content-Type': 'application/json' }),
                 ...headers
             }),
-            body: JSON.stringify(body)
+            body: isForm ? body : JSON.stringify(body)
         };
 
         try {
@@ -120,16 +143,15 @@ export default class Service {
             const statusCode = response.status;
             let responseData = null;
 
-            
             if (statusCode !== 204) {
-                responseData = await response.json();
+                responseData = isBufferResponse ? await response.arrayBuffer() : await response.json();
             }
 
             if (statusCode !== 204 && statusCode !== 200 && statusCode !== 201) {
                 throw Error(responseData?.message);
             }
 
-            return { code: statusCode, data: responseData };
+            return { code: statusCode, data: responseData, headers: response.headers };
         } catch (error) {
             throw error;
         }

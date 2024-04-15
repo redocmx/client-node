@@ -9,7 +9,16 @@
   "engines": {
     "node": ">= 18.0.0"
   },
-  "keywords": ["cfdi a pdf", "cfdi to pdf", "sat mexico", "conversión cfdi a pdf", "cfdi", "personaliza cfdi a pdf", "redoc.mx", "redocmx"],
+  "keywords": [
+    "cfdi a pdf",
+    "cfdi to pdf",
+    "sat mexico",
+    "conversión cfdi a pdf",
+    "cfdi",
+    "personaliza cfdi a pdf",
+    "redoc.mx",
+    "redocmx"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,5 +33,8 @@
   "homepage": "https://github.com/redocmx/client-node#readme",
   "bugs": {
     "url": "https://github.com/redocmx/client-node/issues"
+  },
+  "dependencies": {
+    "form-data": "^4.0.0"
   }
 }
