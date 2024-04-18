@@ -74,23 +74,6 @@ export default class Service {
         return data
     }
 
-    // async createAsset({ path, file }) {
-    //     const body = new FormData()
-
-    //     body.append('path', path)
-
-    //     if (file) {
-    //         body.append('file', new Blob([file.content], { type: 'image/png' }), { filename: 'file' });
-    //     }
-
-    //     const { data } = await this._request('/images', 'POST', {
-    //         isForm: true,
-    //         body
-    //     })
-
-    //     return data
-    // }
-
     async putAsset({ path, file }) {
         const body = new FormData()
 
@@ -104,27 +87,6 @@ export default class Service {
 
         return data
     }
-
-    // async updateAsset({ path, name, file }) {
-    //     const body = new FormData()
-
-    //     body.append('path', path)
-
-    //     if (name) {
-    //         body.append('name', name)
-    //     }
-
-    //     if (file) {
-    //         body.append('file', new Blob([file.content], { type: 'image/png' }), { filename: 'file' });
-    //     }
-
-    //     const { data } = await this._request('/images', 'PATCH', {
-    //         isForm: true,
-    //         body
-    //     })
-
-    //     return data
-    // }
 
     async deleteAsset({ path }) {
         await this._request('/images', 'DELETE', {
