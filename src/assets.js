@@ -77,11 +77,15 @@ export default class Assets {
       throw new TypeError('Source must be provided to put an asset.');
     }
 
+    if (typeof source !== 'string' && !(source instanceof Uint8Array)) {
+      throw new TypeError('Path must be a valid string or a buffer array.');
+    }
+
     const assetData = {
       path
     }
 
-    const isBufferSource = typeof source !== 'string'
+    const isBufferSource = source instanceof Uint8Array
 
     if (isBufferSource) {
       const file = { type: 'buffer', content: source }

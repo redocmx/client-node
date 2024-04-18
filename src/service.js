@@ -36,8 +36,8 @@ export default class Service {
 
         body.append('xml', new Blob([file.content], { type: 'text/xml' }), { filename: 'document' });
 
-        const { data: arrayBuffer, headers } = this._request('/cfdis/convert', 'POST', {
-            isForm,
+        const { data: arrayBuffer, headers } = await this._request('/cfdis/convert', 'POST', {
+            isForm: true,
             isBufferResponse: true,
             headers: {
                 'Accept': 'application/pdf',
@@ -58,6 +58,12 @@ export default class Service {
 
     // Assets
     async fetchAssets({ path, options }) {
+
+        if(options?.nextToken) {
+            options.next_token = options.nextToken
+            delete options.nextToken
+        }
+
         const { data } = await this._request('/images', 'GET', {
             params: {
                 path,
@@ -68,16 +74,30 @@ export default class Service {
         return data
     }
 
-    async createAsset({ path, file }) {
+    // async createAsset({ path, file }) {
+    //     const body = new FormData()
+
+    //     body.append('path', path)
+
+    //     if (file) {
+    //         body.append('file', new Blob([file.content], { type: 'image/png' }), { filename: 'file' });
+    //     }
+
+    //     const { data } = await this._request('/images', 'POST', {
+    //         isForm: true,
+    //         body
+    //     })
+
+    //     return data
+    // }
+
+    async putAsset({ path, file }) {
         const body = new FormData()
 
         body.append('path', path)
+        body.append('file', new Blob([file.content], { type: 'image/png' }), { filename: 'file' });
 
-        if (file) {
-            body.append('file', new Blob([file.content], { type: 'image/png' }), { filename: 'file' });
-        }
-
-        const { data } = await this._request('/images', 'POST', {
+        const { data } = await this._request('/images', 'PUT', {
             isForm: true,
             body
         })
@@ -85,26 +105,26 @@ export default class Service {
         return data
     }
 
-    async updateAsset({ path, name, file }) {
-        const body = new FormData()
+    // async updateAsset({ path, name, file }) {
+    //     const body = new FormData()
 
-        body.append('path', path)
+    //     body.append('path', path)
 
-        if (name) {
-            body.append('name', name)
-        }
+    //     if (name) {
+    //         body.append('name', name)
+    //     }
 
-        if (file) {
-            body.append('file', new Blob([file.content], { type: 'image/png' }), { filename: 'file' });
-        }
+    //     if (file) {
+    //         body.append('file', new Blob([file.content], { type: 'image/png' }), { filename: 'file' });
+    //     }
 
-        const { data } = await this._request('/images', 'PATCH', {
-            isForm: true,
-            body
-        })
+    //     const { data } = await this._request('/images', 'PATCH', {
+    //         isForm: true,
+    //         body
+    //     })
 
-        return data
-    }
+    //     return data
+    // }
 
     async deleteAsset({ path }) {
         await this._request('/images', 'DELETE', {
