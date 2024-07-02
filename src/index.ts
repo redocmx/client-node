@@ -2,9 +2,14 @@ import Cfdi from './cfdi.js';
 import Addenda from './addenda.js';
 import Service from './service.js';
 import Assets from './assets.js';
+import { RedocConstructorParams } from './types.js';
 
 export default class Redoc {
-    constructor(config) {
+
+    apiKey?: string;
+    service?: Service;
+    
+    constructor(config: string | RedocConstructorParams) {
 
         if (config && typeof config === 'string') {
             this.apiKey = config;
@@ -25,7 +30,7 @@ export default class Redoc {
     }
 
     get cfdi() {
-        return new Cfdi(this.service);
+        return new Cfdi(this.service!);
     }
 
     get addenda() {
@@ -33,6 +38,6 @@ export default class Redoc {
     }
 
     get assets() {
-        return new Assets(this.service)
+        return new Assets(this.service!)
     }
 }

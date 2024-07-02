@@ -1,11 +1,17 @@
 import File from './file.js'
+import Service from './service.js';
+
+import { FetchPaginationOptions, FileComputed } from './types.js';
 
 export default class Assets {
-  constructor(service) {
+
+  service: Service;
+
+  constructor(service: Service) {
     this.service = service
   }
 
-  async get(path) {
+  async get(path: string) {
     if (!path || path === '/') {
       throw new TypeError('Path must be provided to get an asset.');
     }
@@ -23,7 +29,7 @@ export default class Assets {
     return asset
   }
 
-  async delete(path) {
+  async delete(path: string) {
     if (!path || path === '/') {
       throw new TypeError('Path must be provided to get an asset.');
     }
@@ -37,7 +43,7 @@ export default class Assets {
     return asset
   }
 
-  async list(path, options) {
+  async list(path: string, options: FetchPaginationOptions) {
     if (path === null || path === undefined || path === '/') {
       throw new TypeError('Path must be provided to get an asset.');
     }
@@ -59,7 +65,7 @@ export default class Assets {
     return asset
   }
 
-  async put(path, source) {
+  async put(path: string, source: string | Buffer) {
     if (!path || path === '/') {
       throw new TypeError('Path must be provided to put an asset.');
     }
@@ -77,24 +83,20 @@ export default class Assets {
     }
 
     if (typeof source !== 'string' && !(source instanceof Uint8Array)) {
-      throw new TypeError('Path must be a valid string or a buffer array.');
-    }
-
-    const assetData = {
-      path
+      throw new TypeError('Source must be a valid string or a buffer array.');
     }
 
     const isBufferSource = source instanceof Uint8Array
 
+    let file: FileComputed
+
     if (isBufferSource) {
-      const file = { type: 'buffer', content: source }
-      assetData.file = file
+      file = { type: 'buffer', content: source }
     } else {
-      const file = new File().fromFile(source)
-      assetData.file = await file.getFile()
+      file =await ( new File().fromFile(source)).getFile()
     }
 
-    const asset = await this.service.putAsset({ path: assetData.path, file: assetData?.file })
+    const asset = await this.service.putAsset({ path, file })
 
     return asset
   }

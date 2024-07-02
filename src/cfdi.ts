@@ -1,9 +1,17 @@
 import Pdf from './pdf.js';
 import Addenda from './addenda.js';
 import File from './file.js';
+import Service from './service.js';
+import { Payload } from './types.js';
 
 export default class Cfdi extends File {
-    constructor(service) {
+
+    pdf: Pdf | null;
+    service: Service;
+    addenda: Addenda | null;
+    addendaReplaceValues: { [key:string]: string } | null;
+
+    constructor(service: Service) {
         super();
         this.pdf = null;
 
@@ -13,7 +21,7 @@ export default class Cfdi extends File {
         this.service = service;
     }
 
-    setAddenda(addenda, replaceValues = null) {
+    setAddenda(addenda: Addenda, replaceValues = null) {
         if (addenda && !(addenda instanceof Addenda)) {
             throw new TypeError('Addenda must be Addenda instance.');
         }
@@ -26,7 +34,7 @@ export default class Cfdi extends File {
         this.addendaReplaceValues = replaceValues
     }
 
-    async toPdf(payload = {}) {
+    async toPdf(payload: Payload = {}) {
         if (this.pdf) {
             return this.pdf;
         }
@@ -38,7 +46,7 @@ export default class Cfdi extends File {
         const file = await this.getFile();
 
         if (this.addenda) {
-            const addendaContent = await this.addenda.getFileContent(this.addendaReplaceValues);
+            const addendaContent = await this.addenda.getFileContent(this.addendaReplaceValues ?? {});
             payload.addenda = addendaContent;
         }
 

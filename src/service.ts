@@ -1,9 +1,18 @@
-import fs from 'fs'
+import * as fs from 'fs'
+import * as path from 'path';
 
-const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+import { RequestConfig, ServiceConstructorParams, ServiceConvertCfdiParams, ServiceDeleteAssetParams, ServiceFetchAssetsParams, ServicePutAssetParams } from './types.js';
+
+const pkgPath = path.resolve(__dirname, 'package.json');
+const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+
+console.log('pkg', pkg)
 
 export default class Service {
-    constructor(config) {
+    apiKey?: string
+    apiUrl?: string;
+
+    constructor(config?: string | ServiceConstructorParams) {
 
         if (config && typeof config === 'string') {
             this.apiKey = config;
@@ -15,11 +24,11 @@ export default class Service {
         }
 
         this.apiKey = this.apiKey || process.env.REDOC_API_KEY;
-        this.apiUrl = this.apiUrl || process.env.REDOC_API_URL || 'https://api.redoc.mx/cfdis/convert';
+        this.apiUrl = this.apiUrl || process.env.REDOC_API_URL || 'https://api.redoc.mx';
 
     }
 
-    async cfdisConvert({ file, payload }) {
+    async cfdisConvert({ file, payload }: ServiceConvertCfdiParams) {
 
         const body = new FormData();
 
@@ -30,7 +39,7 @@ export default class Service {
             body.append('addenda', payload.addenda);
         }
 
-        body.append('xml', new Blob([file.content], { type: 'text/xml' }), { filename: 'document' });
+        body.append('xml', new Blob([file.content], { type: 'text/xml' }), 'document');
 
         const { data: arrayBuffer, headers } = await this._request('/cfdis/convert', 'POST', {
             isForm: true,
@@ -43,38 +52,35 @@ export default class Service {
 
         const buffer = Buffer.from(arrayBuffer);
 
-        const metadata = Buffer.from((headers.get('x-redoc-xml-metadata')), 'base64').toString('utf-8');
+        const headerMetadata = headers.get('x-redoc-xml-metadata') ?? ''
+        const metadata = JSON.parse(Buffer.from(headerMetadata, 'base64').toString('utf-8') ?? '{}');
 
-        const transactionId = headers.get('x-redoc-transaction-id');
-        const totalPages = headers.get('x-redoc-pdf-total-pages');
-        const totalTime = headers.get('x-redoc-process-total-time');
+        const transactionId = headers.get('x-redoc-transaction-id') ?? '';
+        const totalPages = parseInt(headers.get('x-redoc-pdf-total-pages') ?? '0');
+        const totalTime = parseInt(headers.get('x-redoc-process-total-time') ?? '0');
 
         return { buffer, metadata, transactionId, totalPages, totalTime };
     }
 
     // Assets
-    async fetchAssets({ path, options }) {
-
-        if(options?.nextToken) {
-            options.next_token = options.nextToken
-            delete options.nextToken
-        }
+    async fetchAssets({ path, options }: ServiceFetchAssetsParams) {
 
         const { data } = await this._request('/images', 'GET', {
             params: {
                 path,
-                ...options
+                ...(options?.nextToken ? { next_token: options?.nextToken } : {}),
+                ...(options?.limit ? { limit: options?.limit } : {})
             }
         })
 
         return data
     }
 
-    async putAsset({ path, file }) {
+    async putAsset({ path, file }: ServicePutAssetParams) {
         const body = new FormData()
 
         body.append('path', path)
-        body.append('file', new Blob([file.content], { type: 'image/png' }), { filename: 'file' });
+        body.append('file', new Blob([file.content], { type: 'image/png' }), 'file');
 
         const { data } = await this._request('/images', 'PUT', {
             isForm: true,
@@ -84,7 +90,7 @@ export default class Service {
         return data
     }
 
-    async deleteAsset({ path }) {
+    async deleteAsset({ path }: ServiceDeleteAssetParams) {
         await this._request('/images', 'DELETE', {
             params: {
                 path,
@@ -92,7 +98,7 @@ export default class Service {
         })
     }
 
-    async _request(endpoint, method, config = {}) {
+    async _request(endpoint: string, method: string, config: RequestConfig = {}) {
         const { headers, body, params, isForm = false, isBufferResponse = false } = config;
 
         // Create a new URLSearchParams object for the query parameters
@@ -107,13 +113,13 @@ export default class Service {
         const requestOptions = {
             method,
             headers: new Headers({
-                'x-redoc-api-key': this.apiKey,
+                'x-redoc-api-key': this.apiKey ?? '',
                 'redoc-origin-name': 'sdk_node',
                 'redoc-origin-version': pkg.version,
                 ...(isForm ? {} : { 'Content-Type': 'application/json' }),
-                ...headers
+                ...(headers ? headers : {})
             }),
-            body: isForm ? body : JSON.stringify(body)
+            body: isForm ? body as FormData : JSON.stringify(body)
         };
 
         try {
