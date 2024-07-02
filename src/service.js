@@ -1,21 +1,7 @@
 export default class Service {
-    static instance = null;
-
     constructor(apiKey) {
-        if (Service.instance) {
-            throw new Error("You cannot create more than one instance!");
-        }
-
         this.apiKey = apiKey || process.env.REDOC_API_KEY;
         this.apiUrl = process.env.REDOC_API_URL || 'https://api.redoc.mx/cfdis/convert';
-        Service.instance = this;
-    }
-
-    static getInstance(apiKey) {
-        if (!Service.instance) {
-            Service.instance = new Service(apiKey);
-        }
-        return Service.instance;
     }
 
     async cfdisConvert({file, payload}) {

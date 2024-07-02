@@ -1,17 +1,16 @@
-import Service from './service.js';
 import Pdf from './pdf.js';
 import Addenda from './addenda.js';
 import File from './file.js';
 
 export default class Cfdi extends File {
-    constructor() {
+    constructor(service) {
         super();
         this.pdf = null;
 
         this.addenda = null
         this.addendaReplaceValues = null
 
-        this.service = Service.getInstance();
+        this.service = service;
     }
 
     setAddenda(addenda, replaceValues = null) {
