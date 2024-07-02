@@ -9,7 +9,7 @@ export default class Redoc {
     }
 
     get cfdi() {
-        return new Cfdi();
+        return new Cfdi(this.service);
     }
 
     get addenda() {
