@@ -1,9 +1,8 @@
-import Service from "./service.js";
 import File from './file.js'
 
 export default class Assets {
-  constructor() {
-    this.service = Service.getInstance();
+  constructor(service) {
+    this.service = service
   }
 
   async get(path) {
