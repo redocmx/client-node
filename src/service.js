@@ -3,26 +3,22 @@ import fs from 'fs'
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 
 export default class Service {
-    static instance = null;
+    constructor(config) {
 
-    constructor(apiKey) {
-        if (Service.instance) {
-            throw new Error("You cannot create more than one instance!");
+        if (config && typeof config === 'string') {
+            this.apiKey = config;
         }
 
-        this.apiKey = apiKey || process.env.REDOC_API_KEY;
-        this.apiUrl = process.env.REDOC_API_URL || 'https://api.redoc.mx';
-        Service.instance = this;
-    }
-
-    static getInstance(apiKey) {
-        if (!Service.instance) {
-            Service.instance = new Service(apiKey);
+        if (config && typeof config === 'object') {
+            this.apiKey = config?.apiKey;
+            this.apiUrl = config?.apiUrl;
         }
-        return Service.instance;
+
+        this.apiKey = this.apiKey || process.env.REDOC_API_KEY;
+        this.apiUrl = this.apiUrl || process.env.REDOC_API_URL || 'https://api.redoc.mx/cfdis/convert';
+
     }
 
-    // CFDI
     async cfdisConvert({ file, payload }) {
 
         const body = new FormData();

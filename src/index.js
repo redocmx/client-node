@@ -4,13 +4,28 @@ import Service from './service.js';
 import Assets from './assets.js';
 
 export default class Redoc {
-    constructor(apiKey) {
-        this.apiKey = apiKey || process.env.REDOC_API_KEY;
-        this.service = new Service(this.apiKey);
+    constructor(config) {
+
+        if (config && typeof config === 'string') {
+            this.apiKey = config;
+            this.service = new Service(this.apiKey);
+        }
+
+        if (config && typeof config === 'object') {
+            const { apiKey, apiUrl } = config
+
+            if (!apiKey) {
+                throw new Error(`You must provide the apiKey config.`);
+            }
+
+            this.service = new Service({ apiKey, apiUrl });
+        }
+
+        this.service = this.service || new Service();
     }
 
     get cfdi() {
-        return new Cfdi();
+        return new Cfdi(this.service);
     }
 
     get addenda() {
@@ -18,6 +33,6 @@ export default class Redoc {
     }
 
     get assets() {
-        return new Assets()
+        return new Assets(this.service)
     }
 }
