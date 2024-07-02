@@ -129,9 +129,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Test files
-apple.png
-cfdi.xml
-resultado.pdf
-spotify.png
-test.js
+# Examples
+examples/

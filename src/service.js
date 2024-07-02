@@ -11,7 +11,7 @@ export default class Service {
         }
 
         this.apiKey = apiKey || process.env.REDOC_API_KEY;
-        this.apiBaseUrl = process.env.REDOC_API_URL || 'https://api.redoc.mx';
+        this.apiUrl = process.env.REDOC_API_URL || 'https://api.redoc.mx';
         Service.instance = this;
     }
 
@@ -104,8 +104,8 @@ export default class Service {
 
         // Append the query parameters to the URL
         const requestUrl = params
-            ? `${this.apiBaseUrl + endpoint}?${searchParams.toString()}`
-            : this.apiBaseUrl + endpoint;
+            ? `${this.apiUrl + endpoint}?${searchParams.toString()}`
+            : this.apiUrl + endpoint;
 
         // Create the request options
         const requestOptions = {
