@@ -29,5 +29,5 @@ export default class Redoc {
 
     get addenda() {
         return new Addenda()
-    }
+    }   
 }
