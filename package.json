@@ -1,6 +1,6 @@
 {
   "name": "redocmx",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Conversión CFDI a PDF",
   "main": "src/index.js",
   "types": "src/types.d.ts",
@@ -9,7 +9,16 @@
   "engines": {
     "node": ">= 18.0.0"
   },
-  "keywords": ["cfdi a pdf", "cfdi to pdf", "sat mexico", "conversión cfdi a pdf", "cfdi", "personaliza cfdi a pdf", "redoc.mx", "redocmx"],
+  "keywords": [
+    "cfdi a pdf",
+    "cfdi to pdf",
+    "sat mexico",
+    "conversión cfdi a pdf",
+    "cfdi",
+    "personaliza cfdi a pdf",
+    "redoc.mx",
+    "redocmx"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

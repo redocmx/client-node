@@ -1,6 +1,7 @@
 import Cfdi from './cfdi.js';
 import Addenda from './addenda.js';
 import Service from './service.js';
+import Assets from './assets.js';
 
 export default class Redoc {
     constructor(apiKey) {
@@ -14,5 +15,9 @@ export default class Redoc {
 
     get addenda() {
         return new Addenda()
+    }
+
+    get assets() {
+        return new Assets()
     }
 }
