@@ -2,7 +2,7 @@ import Pdf from './pdf.js';
 import Addenda from './addenda.js';
 import File from './file.js';
 import Service from './service.js';
-import { Payload } from './types.js';
+import { PdfPayload } from './types.js';
 
 export default class Cfdi extends File {
 
@@ -34,7 +34,7 @@ export default class Cfdi extends File {
         this.addendaReplaceValues = replaceValues
     }
 
-    async toPdf(payload: Payload = {}) {
+    async toPdf(payload: PdfPayload = {}) {
         if (this.pdf) {
             return this.pdf;
         }
