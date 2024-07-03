@@ -1,3 +1,3 @@
-import { Redoc } from "./index.js";
+import { Redoc } from "./redoc.js";
 
 export default Redoc

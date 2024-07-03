@@ -19,6 +19,11 @@ export default class File {
     return this
   }
 
+  fromBuffer(fileBuffer: Buffer) {
+    this.fileBuffer = fileBuffer;
+    return this
+  }
+
   fromString(fileContent: string) {
     this.fileContent = fileContent;
     return this

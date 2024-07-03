@@ -1,4 +1,4 @@
-import { Redoc } from "./index";
+import { Redoc } from "./redoc";
 
 module.exports = Redoc;
 

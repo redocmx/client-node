@@ -10,7 +10,7 @@
     "strict": true,
     "strictFunctionTypes": true,
     "types": [ "node" ],
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
   "include": ["./src/**/*"],
   "exclude": ["./src/redoc.esm.ts"]
