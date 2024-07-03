@@ -2,7 +2,8 @@
   "extends": "./tsconfig.cjs.json",
   "compilerOptions": {
     "outDir": "./esm",
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "module": "nodenext",
   },
+  "exclude": ["./src/redoc.cjs.ts"]
 }

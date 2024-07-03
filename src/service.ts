@@ -1,13 +1,5 @@
-import * as fs from 'fs'
-import * as path from 'path';
-
 import { RequestConfig, ServiceConstructorParams, ServiceConvertCfdiParams, ServiceDeleteAssetParams, ServiceFetchAssetsParams, ServicePutAssetParams } from './types.js';
-
-const pkgPath = path.resolve(__dirname, 'package.json');
-const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-
-console.log('pkg', pkg)
-
+import { version } from './version.js';
 export default class Service {
     apiKey?: string
     apiUrl?: string;
@@ -115,7 +107,7 @@ export default class Service {
             headers: new Headers({
                 'x-redoc-api-key': this.apiKey ?? '',
                 'redoc-origin-name': 'sdk_node',
-                'redoc-origin-version': pkg.version,
+                'redoc-origin-version': version,
                 ...(isForm ? {} : { 'Content-Type': 'application/json' }),
                 ...(headers ? headers : {})
             }),

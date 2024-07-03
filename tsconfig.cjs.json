@@ -10,7 +10,8 @@
     "strict": true,
     "strictFunctionTypes": true,
     "types": [ "node" ],
-    "esModuleInterop": true // This is a viral option, do not enable https://www.semver-ts.org/#module-interop
+    "esModuleInterop": true,
   },
   "include": ["./src/**/*"],
+  "exclude": ["./src/redoc.esm.ts"]
 }

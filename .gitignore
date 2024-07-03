@@ -131,3 +131,7 @@ dist
 
 # Examples
 examples/
+
+# Build
+cjs/
+esm/

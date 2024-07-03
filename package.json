@@ -2,13 +2,13 @@
   "name": "redocmx",
   "version": "0.0.7",
   "description": "Conversión CFDI a PDF",
-  "main": "cjs/index.js",
+  "main": "cjs/redoc.cjs.js",
   "types": "types/index.d.ts",
   "exports": {
     "types": "./types/index.d.ts",
     "default": {
-      "import": "./esm/index.js",
-      "require": "./cjs/index.js"
+      "import": "./esm/redoc.esm.js",
+      "require": "./cjs/redoc.cjs.js"
     }
   },
   "type": "module",
@@ -27,9 +27,10 @@
     "redocmx"
   ],
   "scripts": {
-    "build": "npm run build-esm && npm run build-cjs",
+    "build": "npm run extract-version && npm run build-esm && npm run build-cjs",
     "build-esm": "mkdir -p esm && tsc -p tsconfig.esm.json && echo '{\"type\":\"module\"}' > esm/package.json",
     "build-cjs": "mkdir -p cjs && tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > cjs/package.json",
+    "extract-version": "jq -r '.version' package.json | awk '{print \"export const version = \\\"\"$0\"\\\";\"}' > src/version.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
@@ -45,12 +46,8 @@
     "url": "https://github.com/redocmx/client-node/issues"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^26.0.1",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "rollup": "^2.79.1",
-    "rollup-plugin-terser": "^7.0.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.5.3",
-    "@types/node": ">=8.1.0"
+    "@types/node": ">=8.1.0",
+    "husky": "^9.0.11",
+    "typescript": "^5.5.3"
   }
 }

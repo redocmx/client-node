@@ -4,7 +4,7 @@ import Service from './service.js';
 import Assets from './assets.js';
 import { RedocConstructorParams } from './types.js';
 
-export default class Redoc {
+export class Redoc {
 
     apiKey?: string;
     service?: Service;
