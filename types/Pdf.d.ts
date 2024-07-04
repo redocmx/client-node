@@ -17,6 +17,9 @@ declare module 'redocmx' {
 
             interface Payload {
                 style_pdf?: string;
+            }
+
+            interface InternalPayload extends Payload{
                 format?: string;
                 addenda?: string;
             }

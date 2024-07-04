@@ -14,7 +14,7 @@ declare module 'redocmx' {
             namespace Convert {
                 interface Params {
                     file: File.Result;
-                    payload?: Pdf.Payload;
+                    payload?: Pdf.InternalPayload;
                 }
             }
         }
