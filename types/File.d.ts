@@ -11,9 +11,9 @@ declare module 'redocmx' {
         }
 
         class File {
-            filePath: string | null;
-            fileBuffer: Buffer | null;
-            fileContent: string | null;
+            private filePath: string | null;
+            private fileBuffer: Buffer | null;
+            private fileContent: string | null;
 
             constructor();
 
@@ -23,7 +23,7 @@ declare module 'redocmx' {
 
             fromString(fileContent: string): this;
             
-            getFile(): Promise<{
+            private getFile(): Promise<{
                 content: string;
                 type: string;
             } | {

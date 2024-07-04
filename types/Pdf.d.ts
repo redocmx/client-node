@@ -1,5 +1,6 @@
 /// <reference path="./File.d.ts" />
 /// <reference path="./Cfdi.d.ts" />
+/// <reference types="node" />
 
 declare module 'redocmx' {
     namespace Redoc {
@@ -22,11 +23,11 @@ declare module 'redocmx' {
         }
 
         class Pdf {
-            buffer: Buffer;
-            transactionId: string;
-            totalPages: number;
-            totalTime: number;
-            metadata: Cfdi.Metadata;
+            private buffer: Buffer;
+            private transactionId: string;
+            private totalPages: number;
+            private totalTime: number;
+            private metadata: Cfdi.Metadata;
 
             constructor({ buffer, transactionId, totalPages, totalTime, metadata }: Pdf.ConstructorParams);
 

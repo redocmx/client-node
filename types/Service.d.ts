@@ -14,8 +14,8 @@ declare module 'redocmx' {
         }
 
         class Service {
-            apiKey?: string;
-            apiUrl?: string;
+            private apiKey?: string;
+            private apiUrl?: string;
 
             constructor(config?: string | Service.ConstructorParams);
 

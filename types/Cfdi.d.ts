@@ -20,14 +20,14 @@ declare module 'redocmx' {
         }
 
         class Cfdi extends File {
-            pdf: Pdf | null;
-            service: Service;
-            addenda: Addenda | null;
-            addendaReplaceValues: Addenda.ReplaceOptions | null;
+            private pdf: Pdf | null;
+            private service: Service;
+            private addenda: Addenda | null;
+            private addendaReplaceValues: Addenda.ReplaceOptions | null;
 
             constructor(service: Service);
 
-            setAddenda(addenda: Addenda, replaceValues?: any): void;
+            setAddenda(addenda: Addenda, replaceValues?: Addenda.ReplaceOptions): void;
 
             toPdf(payload?: Pdf.Payload): Promise<Pdf>;
         }

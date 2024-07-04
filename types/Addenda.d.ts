@@ -12,9 +12,9 @@ declare module 'redocmx' {
         class Addenda extends File {
             constructor();
 
-            replaceValues(content: string, options?: Addenda.ReplaceOptions | null): string;
+            private replaceValues(content: string, options?: Addenda.ReplaceOptions | null): string;
 
-            getFileContent(replaceValues: Addenda.ReplaceOptions): Promise<string>;
+            private getFileContent(replaceValues: Addenda.ReplaceOptions): Promise<string>;
         }
     }
 }

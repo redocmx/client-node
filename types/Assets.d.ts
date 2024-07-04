@@ -51,7 +51,7 @@ declare module 'redocmx' {
         }
 
         class Assets {
-            service: Service;
+            private service: Service;
 
             constructor(service: Service);
 

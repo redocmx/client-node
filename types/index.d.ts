@@ -15,12 +15,10 @@ declare module 'redocmx' {
   }
 
   export class Redoc {
-    static Redoc: typeof Redoc;
-
     constructor(config: string | Redoc.ConstructorParams);
 
-    apiKey?: string;
-    service?: Redoc.Service;
+    private apiKey?: string;
+    private service?: Redoc.Service;
 
     get cfdi(): Redoc.Cfdi;
     get addenda(): Redoc.Addenda;
