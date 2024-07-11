@@ -1,21 +1,21 @@
 import { RequestConfig, ServiceConstructorParams, ServiceConvertCfdiParams, ServiceDeleteAssetParams, ServiceFetchAssetsParams, ServicePutAssetParams } from './types.js';
 import { version } from './version.js';
 export default class Service {
-    apiKey?: string
+    #apiKey?: string
     apiUrl?: string;
 
     constructor(config?: string | ServiceConstructorParams) {
 
         if (config && typeof config === 'string') {
-            this.apiKey = config;
+            this.#apiKey = config;
         }
 
         if (config && typeof config === 'object') {
-            this.apiKey = config?.apiKey;
+            this.#apiKey = config?.apiKey;
             this.apiUrl = config?.apiUrl;
         }
 
-        this.apiKey = this.apiKey || process.env.REDOC_API_KEY;
+        this.#apiKey = this.#apiKey || process.env.REDOC_API_KEY;
         this.apiUrl = this.apiUrl || process.env.REDOC_API_URL || 'https://api.redoc.mx';
 
     }
@@ -105,7 +105,7 @@ export default class Service {
         const requestOptions = {
             method,
             headers: new Headers({
-                'x-redoc-api-key': this.apiKey ?? '',
+                'x-redoc-api-key': this.#apiKey ?? '',
                 'redoc-origin-name': 'sdk_node',
                 'redoc-origin-version': version,
                 ...(isForm ? {} : { 'Content-Type': 'application/json' }),

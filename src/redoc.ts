@@ -6,14 +6,14 @@ import { RedocConstructorParams } from './types.js';
 
 export class Redoc {
 
-    apiKey?: string;
+    #apiKey?: string;
     service?: Service;
     
     constructor(config: string | RedocConstructorParams) {
 
         if (config && typeof config === 'string') {
-            this.apiKey = config;
-            this.service = new Service(this.apiKey);
+            this.#apiKey = config;
+            this.service = new Service(this.#apiKey);
         }
 
         if (config && typeof config === 'object') {
