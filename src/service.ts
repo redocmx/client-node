@@ -1,4 +1,4 @@
-import { RequestConfig, ServiceConstructorParams, ServiceConvertCfdiParams, ServiceDeleteAssetParams, ServiceFetchAssetsParams, ServicePutAssetParams } from './types.js';
+import { FetchError, RequestConfig, ServiceConstructorParams, ServiceConvertCfdiParams, ServiceDeleteAssetParams, ServiceFetchAssetsParams, ServicePutAssetParams } from './types.js';
 import { version } from './version.js';
 export default class Service {
     #apiKey?: string
@@ -126,8 +126,14 @@ export default class Service {
                 responseData = isBufferResponse ? await response.arrayBuffer() : await response.json();
             }
 
-            if (statusCode !== 204 && statusCode !== 200 && statusCode !== 201) {
-                throw Error(responseData?.message);
+            if (!response.ok) {
+                  
+                const error: FetchError = new Error('Redoc HTTP error');
+                error.status = response.status;
+                error.statusText = response.statusText;
+                error.headers = response.headers;
+          
+                throw error;
             }
 
             return { code: statusCode, data: responseData, headers: response.headers };

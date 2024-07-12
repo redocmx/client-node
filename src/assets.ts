@@ -38,13 +38,17 @@ export default class Assets {
       throw new TypeError('Path must be a valid string.');
     }
 
-    const asset = await this.service.deleteAsset({ path })
+    await this.service.deleteAsset({ path })
 
-    return asset
+    return true
   }
 
-  async list(path: string, options: FetchPaginationOptions) {
-    if (path === null || path === undefined || path === '/') {
+  async list(path: string, options: FetchPaginationOptions = {}) {
+    if (!path){
+      path = ''
+    }
+
+    if (path === '/') {
       throw new TypeError('Path must be provided to get an asset.');
     }
 
@@ -57,7 +61,7 @@ export default class Assets {
     }
 
     if (options) {
-      options.limit = options.limit ?? 10
+      options.limit = options?.limit ?? 10
     }
 
     const asset = await this.service.fetchAssets({ path, options })

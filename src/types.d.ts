@@ -62,6 +62,12 @@ export interface CfdisMetadata {
 
 /* Global */
 
+interface FetchError extends Error {
+    status?: number;
+    statusText?: string;
+    headers?: Headers;
+  }
+
 export interface FetchPaginationOptions {
     nextToken?: string;
     limit?: number;
