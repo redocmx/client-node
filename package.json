@@ -1,16 +1,36 @@
 {
   "name": "redocmx",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Conversión CFDI a PDF",
-  "main": "src/index.js",
-  "types": "src/types.d.ts",
+  "main": "cjs/redoc.cjs.js",
+  "types": "types/index.d.ts",
+  "exports": {
+    "types": "./types/index.d.ts",
+    "default": {
+      "import": "./esm/redoc.esm.js",
+      "require": "./cjs/redoc.cjs.js"
+    }
+  },
   "type": "module",
   "private": false,
   "engines": {
     "node": ">= 18.0.0"
   },
-  "keywords": ["cfdi a pdf", "cfdi to pdf", "sat mexico", "conversión cfdi a pdf", "cfdi", "personaliza cfdi a pdf", "redoc.mx", "redocmx"],
+  "keywords": [
+    "cfdi a pdf",
+    "cfdi to pdf",
+    "sat mexico",
+    "conversión cfdi a pdf",
+    "cfdi",
+    "personaliza cfdi a pdf",
+    "redoc.mx",
+    "redocmx"
+  ],
   "scripts": {
+    "build": "npm run extract-version && npm run build-esm && npm run build-cjs",
+    "build-esm": "mkdir -p esm && tsc -p tsconfig.esm.json && echo '{\"type\":\"module\"}' > esm/package.json",
+    "build-cjs": "mkdir -p cjs && tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > cjs/package.json",
+    "extract-version": "jq -r '.version' package.json | awk '{print \"export const version = \\\"\"$0\"\\\";\"}' > src/version.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
@@ -24,5 +44,11 @@
   "homepage": "https://github.com/redocmx/client-node#readme",
   "bugs": {
     "url": "https://github.com/redocmx/client-node/issues"
+  },
+  "dependencies": {
+    "@types/node": "^20.14.9"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3"
   }
 }

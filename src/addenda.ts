@@ -5,10 +5,10 @@ export default class Addenda extends File {
         super()
     }
 
-    replaceValues(content, options = null) {
-        if(!options) return content
+    replaceValues(content: string, options: { [key: string]: string } | null = null) {
+        if (!options) return content
 
-        for(const option of Object.entries(options)) {
+        for (const option of Object.entries(options)) {
             const [key, value] = option
             content = content.split(key).join(value)
         }
@@ -16,10 +16,10 @@ export default class Addenda extends File {
         return content
     }
 
-    async getFileContent(replaceValues) {
+    async getFileContent(replaceValues: { [key: string]: string }) {
         const file = await this.getFile()
         const fileContent = file.content.toString()
-        
+
         return this.replaceValues(fileContent, replaceValues)
     }
 

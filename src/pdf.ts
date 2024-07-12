@@ -1,5 +1,13 @@
+import { CfdisMetadata, PdfConstructorParams } from "./types.js";
+
 export default class Pdf {
-    constructor({buffer, transactionId, totalPages, totalTime, metadata}) {
+    buffer: Buffer;
+    transactionId: string;
+    totalPages: number;
+    totalTime: number;
+    metadata: CfdisMetadata;
+
+    constructor({buffer, transactionId, totalPages, totalTime, metadata}: PdfConstructorParams) {
         this.buffer = buffer;
         this.transactionId = transactionId;
         this.totalPages = totalPages;
