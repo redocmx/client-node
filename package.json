@@ -45,8 +45,10 @@
   "bugs": {
     "url": "https://github.com/redocmx/client-node/issues"
   },
+  "dependencies": {
+    "@types/node": "^20.14.9"
+  },
   "devDependencies": {
-    "@types/node": "^20.14.9",
     "typescript": "^5.5.3"
   }
 }
